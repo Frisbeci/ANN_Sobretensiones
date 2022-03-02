@@ -9,36 +9,24 @@ import cgitb
 import matplotlib.pyplot as plt
 import random
 
-def plot_SOV(ft_REC, ff_REC,v_mag=500,frec=50,tmax=0.2):
-    w = 2*np.pi*frec
-    t = np.linspace(0, tmax, 10000)
-    step = np.heaviside(t-0.05,0.5)
-    exp_ft = np.clip(np.exp(-(t-0.05-1/50*1/12)*200)*(ft_REC-1)+1,0,ft_REC)
-    exp_ff = np.clip(np.exp(-(t-0.05-1/50*1/12)*200)*(ff_REC-1)+1,0,ff_REC)
-    va = v_mag*np.sqrt(2/3)*np.sin(w*t)*step*exp_ft
-    vb = v_mag*np.sqrt(2/3)*np.sin(w*t-np.pi*2/3)*step*exp_ft
-    vc = v_mag*np.sqrt(2/3)*np.sin(w*t+np.pi*2/3)*step*exp_ft
-    vab = v_mag*np.sqrt(2)*np.sin(w*t)*step*exp_ff
-    vbc = v_mag*np.sqrt(2)*np.sin(w*t-np.pi*2/3)*step*exp_ff
-    vca = v_mag*np.sqrt(2)*np.sin(w*t+np.pi*2/3)*step*exp_ff
-    plt.subplot(2,1,1)
-    plt.title('Energización | Referencia sobretensiones lado receptor')
-    plt.grid(alpha = 0.5, linestyle = '--')
-    plt.plot(t*1000,va, color= 'tab:red')
-    plt.plot(t*1000,vb, color= 'tab:green')
-    plt.plot(t*1000,vc, color= 'tab:blue')
-    plt.ylabel('Receptor f-n [kV]')
-    plt.xlabel('Tiempo [ms]')
-    plt.xlim([0,tmax*1e3])
-    plt.subplot(2,1,2)
-    plt.grid(alpha = 0.5, linestyle = '--')
-    plt.plot(t*1000,vab, color= 'tab:red')
-    plt.plot(t*1000,vbc, color= 'tab:green')
-    plt.plot(t*1000,vca, color= 'tab:blue')
-    plt.ylabel('Receptor f-f [kV]')
-    plt.xlabel('Tiempo [ms]')
-    plt.xlim([0,tmax*1e3])
-    plt.tight_layout()
+def plot_diagrama(Uff_emi_pu,Ufn_emi_pu,Uff_rec_pu,Ufn_rec_pu):
+    base = 500*np.sqrt(2)
+    Uff_emi_kv = base*Uff_emi_pu
+    Ufn_emi_kv = base*Ufn_emi_pu
+    Uff_rec_kv = base*Uff_rec_pu
+    Ufn_rec_kv = base*Ufn_rec_pu
+    maxpu = 3.5
+    path ='utils/'
+    fname ='sistema.png'
+    im = plt.imread(path+fname)
+    plt.imshow(im)
+    plt.text(300,150,'Lado Emisor')
+    plt.text(150,250,'Uf-f = '+str(Uff_emi_pu)+' [pu] | '+str(int(Uff_emi_kv))+' [kV]', color = [min(Uff_emi_pu/maxpu,1),1-min(Uff_emi_pu/maxpu,1),0],fontweight = 'bold')
+    plt.text(150,350,'Uf-n = '+str(Ufn_emi_pu)+' [pu] | '+str(int(Ufn_emi_kv))+' [kV]', color = [min(Ufn_emi_pu/maxpu,1),1-min(Ufn_emi_pu/maxpu,1),0],fontweight = 'bold')
+    plt.text(1350,150,'Lado Receptor')
+    plt.text(1200,250,'Uf-f = '+str(Uff_rec_pu)+' [pu] | '+str(int(Uff_rec_kv))+' [kV]', color = [min(Uff_rec_pu/maxpu,1),1-min(Uff_rec_pu/maxpu,1),0],fontweight = 'bold')
+    plt.text(1200,350,'Uf-n = '+str(Ufn_rec_pu)+' [pu] | '+str(int(Ufn_rec_kv))+' [kV]', color = [min(Ufn_rec_pu/maxpu,1),1-min(Ufn_rec_pu/maxpu,1),0],fontweight = 'bold')
+    plt.axis('off')
     plt.savefig('utils/referencia.png')
 
 loaded_model = load_model('red_entrenada')
@@ -70,18 +58,19 @@ for close1 in barrido:
                 float(form['cpcero'].value) / 10000.0,
                 float(form['simet'].value), float(form['com1'].value), float(form['com2'].value)]
     calculos = sobretensiones(vector_c)
-    o1 = np.append(o1,round(float(calculos['Predicciones'][0])/np.sqrt(3), 4))
-    o2 = np.append(o2,round(float(calculos['Predicciones'][1])/np.sqrt(3), 4))
-    o3 = np.append(o3,round(float(calculos['Predicciones'][2])/np.sqrt(3), 4))
-    o4 = np.append(o4,round(float(calculos['Predicciones'][3])/np.sqrt(3), 4))
+
+    o1 = np.append(o1,round(float(calculos['Predicciones'][0])/np.sqrt(3), 4)) #sqrt(3)
+    o2 = np.append(o2,round(float(calculos['Predicciones'][1]), 4))
+    o3 = np.append(o3,round(float(calculos['Predicciones'][2])/np.sqrt(3), 4)) #sqrt(3)
+    o4 = np.append(o4,round(float(calculos['Predicciones'][3]), 4))
 
 
-o1_98 = round(np.mean(o1)+2.06*np.std(o1),4)
-o2_98 = round(np.mean(o2)+2.06*np.std(o2),4)
-o3_98 = round(np.mean(o3)+2.06*np.std(o3),4)
-o4_98 = round(np.mean(o4)+2.06*np.std(o4),4)
+o1_98 = round(np.mean(o1)+2.06*np.std(o1),2)
+o2_98 = round(np.mean(o2)+2.06*np.std(o2),2)
+o3_98 = round(np.mean(o3)+2.06*np.std(o3),2)
+o4_98 = round(np.mean(o4)+2.06*np.std(o4),2)
 
-plot_SOV(o3_98, o4_98)
+plot_diagrama(o2_98, o1_98, o4_98, o3_98)
 
 print("Content-Type:text/html")
 
@@ -95,30 +84,12 @@ body = f"""
 
 <div id="main">
 
-<div class="flex-container">
-    <div class="flex-child magenta">
-    <p class="negrita gris">IMAGEN REFERENCIAL:</p>
-    <img src="utils/referencia.png?{random.random()}" alt="#" width=500 height=350 style="border: 3px solid #333; margin-top: 10px;"">
-    </div>
+    <p class="negrita gris">CÁLCULOS DE LA RED:</p>
+    <img src="utils/referencia.png?{random.random()}" alt="#" width=640 height=480 style="border: 3px solid #333; margin-top: 10px;"">
+
 """
 
 print(body, file=utf8stdout)
-
-print(f'''
-<div class="flex-child green">
-''', file=utf8stdout)
-
-print(f'''<p class='negrita gris'> CÁLCULOS DE LA RED: </p>''', file=utf8stdout)
-
-print(f'''<p class='negrita'> Fase-Neutro Emisor [pu]: </p> <p>  {o1_98} </p>''', file=utf8stdout)
-print(f'''<p class='negrita'> Fase-Fase Emisor [pu]: </p> <p>  {o2_98} </p>''', file=utf8stdout)
-print(f'''<p class='negrita'> Fase-Neutro Receptor [pu]: </p> <p>  {o3_98} </p>''', file=utf8stdout)
-print(f'''<p class='negrita'> Fase-Fase Receptor [pu]: </p> <p>  {o4_98} </p>''', file=utf8stdout)
-
-print(f'''
-</div>
-</div>
-''',  file=utf8stdout)
 
 footer = f"""
 
