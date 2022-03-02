@@ -1,0 +1,205 @@
+<!-- HTML5 -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" /> <!-- Declaring enconding as UTF 8-->
+    <title> ANN-Sobretensiones</title> <!-- Title in pestaña -->
+    <link rel="stylesheet" type="text/css" media="screen"  href="style.css" />    <!-- CSS: -->
+    <script src="jquery-3.5.0.js"></script>  <!-- Importing JQUERY  -->
+    <script>
+    function show_long(x) {
+     document.getElementById("long_value").innerHTML=x;
+    }
+    function show_rdivx(x) {
+     document.getElementById("rdivx_value").innerHTML=x/100;
+    }
+    function show_icc3f(x) {
+     document.getElementById("icc3f_value").innerHTML=(x/1000).toFixed(1);
+     document.getElementById("contenedor").innerHTML=`
+     <br>
+      <label class="text-field">Corriente de CC-1F de la fuente [kA]: </label><span id="icc1f_value" style="color:red;">${(x/1000).toFixed(1)}</span>
+      <br>
+      <input type="range" min="${x*0.9}" max="${x*1.1}" class="slider" id="ICC1F" name="x0f-fuente" onChange="show_icc1f(this.value);">
+      <br>
+     `
+    }
+    function show_icc1f(x) {
+     document.getElementById("icc1f_value").innerHTML=(x/1000).toFixed(1);
+    }
+    function show_rppos(x) {
+     document.getElementById("rppos_value").innerHTML=x/10000;
+    }
+    function show_rpcero(x) {
+     document.getElementById("rpcero_value").innerHTML=x/1000;
+    }
+    function show_lppos(x) {
+     document.getElementById("lppos_value").innerHTML=x/1000;
+    }
+    function show_lpcero(x) {
+     document.getElementById("lpcero_value").innerHTML=x/100;
+    }
+    function show_cppos(x) {
+     document.getElementById("cppos_value").innerHTML=x/10000;
+    }
+    function show_cpcero(x) {
+     document.getElementById("cpcero_value").innerHTML=x/10000;
+    }
+    </script>
+    <script src="scripts.js"></script>
+</head>
+
+<body>
+
+<ul class="topnav">
+  <li><a class="active" href="index.html">Inicio</a></li>
+  <li><a href="caracteristicas.html">Red Neuronal</a></li>
+</ul>
+
+<div>
+    <!-- Body of page -->
+    <h1>Barras con Rangos de Características</h1>
+    <form id="myform" method="get" onsubmit="return validate_form()">
+
+        <div class="flex-containerr">
+        <div class="flex-childd magenta">
+
+      <!-- Label for Longitud Linea -->
+      <br>
+      <label class="text-field">Longitud de la Línea [km]: </label><span id="long_value" style="color:red;">252</span>
+      <br> 
+      <input type="range" min="5" max="500" value="252" class="slider" id="LONG" name="longitud-linea" onChange="show_long(this.value);">
+      <br>
+
+        <!-- Label for Razon Inductiva de la fuente -->
+      <br>
+      <label class="text-field">Razón inductiva de la fuente [R/X]: </label><span id="rdivx_value" style="color:red;">0.2</span>
+      <br>
+      <input type="range" min="10" max="30" value="20" class="slider" id="RDIVX" name="rdivx-fuente" onChange="show_rdivx(this.value);">
+      <br>
+
+            <!-- Label for Corriente de CC-3F de la fuente -->
+      <br>
+      <label class="text-field">Corriente de CC-3F de la fuente [kA]: </label><span id="icc3f_value" style="color:red;">30.7</span>
+      <br>
+      <input type="range" min="800" max="60600" value="30700" class="slider" id="ICC3F" name="x1f-fuente" onChange="show_icc3f(this.value);">
+      <br>
+
+        <!-- Label for Corriente de CC-1F de la fuente -->
+            <div id="contenedor">
+      <br>
+      <label class="text-field">Corriente de CC-1F de la fuente [kA]: </label><span id="icc1f_value" style="color:red;">30.7</span>
+      <br>
+      <input type="range" min="27630" max="33770" class="slider" id="ICC1F" name="x0f-fuente" onChange="show_icc1f(this.value);">
+      <br>
+                </div>
+
+      <!-- Label for Resistencias de Preinsercion -->
+      <label class="text-field">Resistencias de Preinserción [ohm]</label>
+      <br>
+      <select id="RINSER" name="preinsercion-resistencia" style="width:100px;">
+          <option value=0>0</option>
+          <option value=360>360</option>
+          <option value=380>380</option>
+          <option value=400>400</option>
+          <option value=420>420</option>
+          <option value=440>440</option>
+      </select>
+      <br>
+
+         <!-- Label for Resistencia de secuencia positiva de la línea -->
+      <br>
+      <label class="text-field">Resistencia de secuencia positiva de la línea [ohm/km]: </label><span id="rppos_value" style="color:red;">0.0236</span>
+      <br>
+      <input type="range" min="166" max="307" value="236" class="slider" id="RPPOS" name="rppos-fuente" onChange="show_rppos(this.value);">
+      <br>
+
+         <!-- Label for Resistencia de secuencia negativa de la línea -->
+      <br>
+      <label class="text-field">Resistencia de secuencia cero de la línea [ohm/km]: </label><span id="rpcero_value" style="color:red;">0.263</span>
+      <br>
+      <input type="range" min="162" max="365" value="263" class="slider" id="RPCERO" name="rpcero-fuente" onChange="show_rpcero(this.value);">
+      <br>
+
+           </div>
+            <div class="flex-childd green">
+
+         <!-- Label for Reactancia de secuencia positiva de la linea -->
+      <br>
+      <label class="text-field">Reactancia de secuencia positiva de la linea [ohm/km]: </label><span id="lppos_value" style="color:red;">0.322</span>
+      <br>
+      <input type="range" min="197" max="448" value="322" class="slider" id="LPPOS" name="lppos-fuente" onChange="show_lppos(this.value);">
+      <br>
+
+         <!-- Label for Reactancia de secuencia cero de la linea -->
+      <br>
+      <label class="text-field">Reactancia de secuencia cero de la linea [ohm/km]: </label><span id="lpcero_value" style="color:red;">1.10</span>
+      <br>
+      <input type="range" min="73" max="147" value="110" class="slider" id="LPCERO" name="lpcero-fuente" onChange="show_lpcero(this.value);">
+      <br>
+
+         <!-- Label for Capacitancia de secuencia positiva de la linea -->
+      <br>
+      <label class="text-field">Capacitancia de secuencia positiva de la linea [microF/km]: </label><span id="cppos_value" style="color:red;">0.0127</span>
+      <br>
+      <input type="range" min="78" max="177" value="127" class="slider" id="CPPOS" name="cppos-fuente" onChange="show_cppos(this.value);">
+      <br>
+
+         <!-- Label for Capacitancia de secuencia cero de la linea -->
+      <br>
+      <label class="text-field">Capacitancia de secuencia cero de la linea [microF/km]: </label><span id="cpcero_value" style="color:red;">0.0075</span>
+      <br>
+      <input type="range" min="51" max="100" value="75" class="slider" id="CPCERO" name="cpcero-fuente" onChange="show_cpcero(this.value);">
+      <br>
+
+                <br>
+        <!-- Label for Resistencias de Preinsercion -->
+      <label class="text-field">Compensación simétrica o asimétrica</label>
+      <br>
+      <select id="SIMET" name="simet-linea" style="width:150px;">
+          <option value=1>Simétrica</option>
+          <option value=0>Asimétrica</option>
+      </select>
+      <br>
+
+                <div class="flex-containerrr">
+            <div class="flex-childdd magenta">
+        <!-- Compensación extremo Emisor -->
+                <br>
+      <label class="text-field">Compensación Extremo Emisor</label>
+      <br>
+      <select id="COM1" name="com1-linea" style="width:150px;">
+          <option value=0>Apagado</option>
+          <option value=1>Encendido</option>
+      </select>
+      <br>
+                </div>
+            <div class="flex-childdd green">
+
+        <!-- Compensación extremo Receptor -->
+                <br>
+      <label class="text-field">Compensación Extremo Receptor</label>
+      <br>
+      <select id="COM2" name="com2-linea" style="width:150px;">
+          <option value=0>Apagado</option>
+          <option value=1>Encendido</option>
+      </select>
+      <br>
+                </div>
+                </div>
+
+        </div>
+        </div>
+
+    
+      <input type="submit" value="Ingresar entradas a la Red Neuronal Artificial">
+      <br>
+      <br>
+      </form>
+      </div>
+
+<div id="resultados">
+</div>
+
+</body>
+</html>
