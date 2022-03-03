@@ -12,9 +12,9 @@ import random
 def plot_diagrama(Uff_emi_pu,Ufn_emi_pu,Uff_rec_pu,Ufn_rec_pu):
     base = 500*np.sqrt(2)
     Uff_emi_kv = base*Uff_emi_pu
-    Ufn_emi_kv = base*Ufn_emi_pu
+    Ufn_emi_kv = base*Ufn_emi_pu/np.sqrt(3)
     Uff_rec_kv = base*Uff_rec_pu
-    Ufn_rec_kv = base*Ufn_rec_pu
+    Ufn_rec_kv = base*Ufn_rec_pu/np.sqrt(3)
     maxpu = 3.5
     path ='utils/'
     fname ='sistema.png'
@@ -59,9 +59,9 @@ for close1 in barrido:
                 float(form['simet'].value), float(form['com1'].value), float(form['com2'].value)]
     calculos = sobretensiones(vector_c)
 
-    o1 = np.append(o1,round(float(calculos['Predicciones'][0])/np.sqrt(3), 4)) #sqrt(3)
+    o1 = np.append(o1,round(float(calculos['Predicciones'][0]), 4)) #sqrt(3)
     o2 = np.append(o2,round(float(calculos['Predicciones'][1]), 4))
-    o3 = np.append(o3,round(float(calculos['Predicciones'][2])/np.sqrt(3), 4)) #sqrt(3)
+    o3 = np.append(o3,round(float(calculos['Predicciones'][2]), 4)) #sqrt(3)
     o4 = np.append(o4,round(float(calculos['Predicciones'][3]), 4))
 
 
