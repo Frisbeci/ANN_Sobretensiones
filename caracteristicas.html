@@ -20,7 +20,7 @@
      <br>
       <label class="text-field">Corriente de CC-1F de la fuente [kA]: </label><span id="icc1f_value" style="color:red;">${(x/1000).toFixed(1)}</span>
       <br>
-      <input type="range" min="${x*0.9}" max="${x*1.1}" class="slider" id="ICC1F" name="x0f-fuente" onChange="show_icc1f(this.value);">
+      <input type="range" min="${Math.floor(x*0.9)}" max="${Math.floor(x*1.1)}" class="slider" id="ICC1F" name="x0f-fuente" onChange="show_icc1f(this.value);">
       <br>
      `
     }

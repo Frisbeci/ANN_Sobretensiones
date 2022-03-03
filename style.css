@@ -174,7 +174,8 @@ select {
   display: inline-block;
   font: inherit;
   line-height: 1.5em;
-  padding: 0.5em 3.5em 0.5em 1em;
+  padding: 0.5em 0em 0.5em 0em;
+    text-align: center;
   margin-top: 21px;
 }
 
