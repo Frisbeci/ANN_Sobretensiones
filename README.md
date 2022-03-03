@@ -5,7 +5,7 @@ Para ocupar la aplicación:
 1) Instalar Anaconda
 2) Instalar PyCharm
 3) Ocupar un intérprete de Python versión 3.7
-4) Instalar paquetes numpy, tensorflow 2.0, scikit-learn, joblib, cgi, cgitb, matplotlib, random, pandas, sys
+4) Instalar paquetes numpy, tensorflow 2.0, scikit-learn, joblib, cgi, cgitb, matplotlib, random, pandas, sys (probablemente varios de estos paquetes ya vengan instalados por defecto y solo haya que instalar tensorflow 2.0 y scikit-learn)
 5) Abrir una terminal en PyCharm (asegurándose de que el intérprete que se esté ocupando sea Python 3.7 con los paquetes mencionados anteriormente) y ejecutar el siguiente comando:   python -m http.server --bind localhost --cgi 8000 
 6) Abrir su navegador favorito e ir a la siguiente dirección:    localhost:8000/
 
